@@ -6,9 +6,11 @@ import { MdSearch } from "react-icons/md";
 import AccountDropdown from "./AccountDropdown";
 import Button from "./Button";
 
-type Props = {};
+type Props = {
+  hasSearchInput?: boolean;
+};
 
-const Navbar: React.FC<Props> = () => {
+const Navbar: React.FC<Props> = ({ hasSearchInput = true }) => {
   const [keyword, setKeyword] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const router = useRouter();
@@ -23,21 +25,23 @@ const Navbar: React.FC<Props> = () => {
       <Link href='/'>
         <img src='/images/logo-with-text.svg' alt='logo' />
       </Link>
-      <div className='w-[720px] absolute left-1/2 -translate-x-1/2 flex items-center'>
-        <MdSearch size={24} className='text-slate-400 mr-4' />
-        <input
-          className='font-sans text-sm placeholder-slate-400 text-slate-900 outline-none'
-          type='text'
-          placeholder='Search'
-          value={keyword}
-          onChange={(event) => setKeyword(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              router.push(`/search?keyword=${keyword}`);
-            }
-          }}
-        />
-      </div>
+      {hasSearchInput && (
+        <div className='w-[720px] absolute left-1/2 -translate-x-1/2 flex items-center'>
+          <MdSearch size={24} className='text-slate-400 mr-4' />
+          <input
+            className='font-sans text-sm placeholder-slate-400 text-slate-900 outline-none'
+            type='text'
+            placeholder='Search'
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                router.push(`/search?keyword=${keyword}`);
+              }
+            }}
+          />
+        </div>
+      )}
       {isLoggedIn && (
         <div className='relative'>
           <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>

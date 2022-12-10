@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import AccountDropdown from "./AccountDropdown";
 import Button from "./Button";
@@ -10,11 +11,17 @@ type Props = {};
 const Navbar: React.FC<Props> = () => {
   const [keyword, setKeyword] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+  const router = useRouter();
+
   const isLoggedIn = true;
+
+  useEffect(() => {
+    setKeyword((router.query.keyword as string) || "");
+  }, [router.query.keyword]);
   return (
     <header className='h-16 border-b border-slate-200 flex items-center justify-between px-24'>
       <Link href='/'>
-        <img src='images/logo-with-text.svg' alt='logo' />
+        <img src='/images/logo-with-text.svg' alt='logo' />
       </Link>
       <div className='w-[720px] absolute left-1/2 -translate-x-1/2 flex items-center'>
         <MdSearch size={24} className='text-slate-400 mr-4' />
@@ -24,6 +31,11 @@ const Navbar: React.FC<Props> = () => {
           placeholder='Search'
           value={keyword}
           onChange={(event) => setKeyword(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              router.push(`/search?keyword=${keyword}`);
+            }
+          }}
         />
       </div>
       {isLoggedIn && (

@@ -1,17 +1,11 @@
 import Head from "next/head";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import Article from "../components/Article";
 import Category from "../components/Category";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
-  const categories = [...Array(10)].map((_, index) => {
-    return {
-      id: index + 1,
-      slug: "technology",
-      label: "Technology",
-    };
-  });
+  const router = useRouter();
   const articles = [...Array(4)].map((_, index) => {
     return {
       id: index + 1,
@@ -31,23 +25,17 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Noobium</title>
+        <title>Results for "{router.query.keyword}" Noobium</title>
         <meta name='description' content='Noobium' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Navbar />
       <div className='w-[720px] mx-auto py-24'>
         <div className='mb-16'>
-          <p className='font-sans text-slate-900 text-sm mb-4'>
-            Your Categories
+          <p className='font-sans font-bold text-slate-400 mb-3'>Results for</p>
+          <p className='font-sans font-bold text-slate-900 text-5xl'>
+            {router.query.keyword}
           </p>
-          <div className='flex flex-wrap gap-3'>
-            {categories.map((category) => (
-              <Link href={`/categories/${category.slug}`}>
-                <Category key={category.id} label={category.label} />
-              </Link>
-            ))}
-          </div>
         </div>
         {articles.map((article) => (
           <Article

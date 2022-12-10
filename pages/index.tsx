@@ -18,7 +18,7 @@ export default function Home() {
       title: "Learnign Redugx",
       content:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus voluptas dolorum illum incidunt quis? Enim officia odio consequuntur adipisci nemo.",
-      url: `/article/how-to-learn-redux`,
+      url: "how-to-learn-redux",
       thumbnail: "/images/dummy-article-thumbnail.png",
       category: "Technology",
       date: "2022-09-20 18:00:00",
@@ -52,7 +52,7 @@ export default function Home() {
         {articles.map((article) => (
           <Article
             key={article.id}
-            url={`articles/${article.url}`}
+            url={`/articles/${article.url}`}
             title={article.title}
             content={article.content}
             thumbnail={article.thumbnail}

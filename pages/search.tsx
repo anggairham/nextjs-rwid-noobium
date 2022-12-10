@@ -1,10 +1,9 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Article from "../components/Article";
-import Category from "../components/Category";
 import Navbar from "../components/Navbar";
 
-export default function Home() {
+export default function SearchPage() {
   const router = useRouter();
   const articles = [...Array(4)].map((_, index) => {
     return {
@@ -12,7 +11,7 @@ export default function Home() {
       title: "Learnign Redugx",
       content:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus voluptas dolorum illum incidunt quis? Enim officia odio consequuntur adipisci nemo.",
-      url: `/article/how-to-learn-redux`,
+      url: "how-to-learn-redux",
       thumbnail: "/images/dummy-article-thumbnail.png",
       category: "Technology",
       date: "2022-09-20 18:00:00",
@@ -40,7 +39,7 @@ export default function Home() {
         {articles.map((article) => (
           <Article
             key={article.id}
-            url={`articles/${article.url}`}
+            url={`/articles/${article.url}`}
             title={article.title}
             content={article.content}
             thumbnail={article.thumbnail}

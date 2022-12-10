@@ -1,9 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Article from "../components/Article";
-import Button from "../components/Button";
-import Navbar from "../components/Navbar";
+import Article from "../../components/Article";
+import Button from "../../components/Button";
+import Navbar from "../../components/Navbar";
 
 export default function MyArticlePage() {
   const router = useRouter();

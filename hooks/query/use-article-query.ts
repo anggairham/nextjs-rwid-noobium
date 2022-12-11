@@ -30,15 +30,33 @@ type Response = {
 };
 
 type Payload = {
-  search: string;
+  search?: string;
+  category?: string;
 };
 const action = async (page: number, payload?: Payload): Promise<Response> => {
-  const res = await axios.get("/articles", {
-    params: {
-      page,
-      ...payload,
-    },
-  });
+  let res;
+  if (payload?.category) {
+    // Note by Angga, tidak menggunakan url api seperti ini untuk search category
+    // res = await axios.get(`/articles/${payload.category}`, {
+    //   params: {
+    //     page,
+    //   },
+    // });
+    // gunakan biasa seperti ini, atau gunakan payload json bukan pasang di url
+    res = await axios.get(`/articles`, {
+      params: {
+        page,
+        category: payload?.category,
+      },
+    });
+  } else {
+    res = await axios.get("/articles", {
+      params: {
+        page,
+        search: payload?.search,
+      },
+    });
+  }
   return res.data.data;
 };
 

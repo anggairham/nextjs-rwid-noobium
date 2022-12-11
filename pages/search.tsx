@@ -2,25 +2,34 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Article from "../components/Article";
 import Navbar from "../components/Navbar";
+import Loading from "react-spinners/BeatLoader";
+import useArticlesQuery from "../hooks/query/use-article-query";
+import { useEffect, Fragment } from "react";
 
 export default function SearchPage() {
   const router = useRouter();
-  const articles = [...Array(4)].map((_, index) => {
-    return {
-      id: index + 1,
-      title: "Learnign Redugx",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus voluptas dolorum illum incidunt quis? Enim officia odio consequuntur adipisci nemo.",
-      url: "how-to-learn-redux",
-      thumbnail: "/images/dummy-article-thumbnail.png",
-      category: "Technology",
-      date: "2022-09-20 18:00:00",
-      author: {
-        name: "Joh Doe",
-        photo: "/images/dummy-avatar.png",
-      },
-    };
+
+  const articlesQuery = useArticlesQuery({
+    search: router.query.keyword as string,
   });
+  useEffect(() => {
+    const handler = () => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        document.documentElement;
+      const isScrollBottom = scrollHeight - scrollTop === clientHeight;
+
+      if (isScrollBottom) {
+        if (articlesQuery.hasNextPage && !articlesQuery.isFetchingNextPage) {
+          articlesQuery.fetchNextPage();
+        }
+      }
+    };
+    document.addEventListener("scroll", handler);
+
+    return () => {
+      document.addEventListener("scroll", handler);
+    };
+  }, [articlesQuery.isSuccess, articlesQuery.data]);
   return (
     <div>
       <Head>
@@ -36,18 +45,41 @@ export default function SearchPage() {
             {router.query.keyword}
           </p>
         </div>
-        {articles.map((article) => (
-          <Article
-            key={article.id}
-            url={`/articles/${article.url}`}
-            title={article.title}
-            content={article.content}
-            thumbnail={article.thumbnail}
-            category={article.category}
-            date={article.date}
-            author={article.author}
-          />
-        ))}
+        {articlesQuery.isSuccess && (
+          <>
+            {articlesQuery.data.pages.map((page, index) => (
+              <Fragment key={index}>
+                {page.data.map((article) => (
+                  <Article
+                    key={article.id}
+                    url={`/articles/${article.slug}`}
+                    title={article.title}
+                    content={article.content_preview}
+                    thumbnail={article.feature_image}
+                    category={article.category.name}
+                    date={article.created_at}
+                    author={{
+                      name: article.user.name,
+                      photo: article.user.picture,
+                    }}
+                  />
+                ))}
+              </Fragment>
+            ))}
+
+            {articlesQuery.isFetchingNextPage && (
+              // Diberi margin karena loadingnya terlalu mepet dengan card article
+              <div className='flex justify-center mt-8'>
+                <Loading size={16} color='rgb(30 66 175)' />
+              </div>
+            )}
+          </>
+        )}
+        {articlesQuery.isLoading && (
+          <div className='flex justify-center'>
+            <Loading size={16} color='rgb(30 66 175)' />
+          </div>
+        )}
       </div>
     </div>
   );

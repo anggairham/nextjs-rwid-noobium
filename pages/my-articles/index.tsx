@@ -46,6 +46,7 @@ export default function MyArticlePage() {
           <Article
             key={article.id}
             url={`/articles/${article.url}`}
+            editUrl={`/my-articles/${article.url}`}
             title={article.title}
             content={article.content}
             thumbnail={article.thumbnail}

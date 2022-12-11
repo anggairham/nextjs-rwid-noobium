@@ -16,7 +16,7 @@ const AccountDropdown: React.FC<Props> = ({}) => {
       <div className='p-4'>
         <ul>
           <li className='mb-3'>
-            <Link href='#'>
+            <Link href='/my-profile'>
               <p className='font-sans text-slate-900 text-xs'>My Profile</p>
             </Link>
           </li>

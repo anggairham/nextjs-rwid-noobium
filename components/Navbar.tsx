@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
+import useUserQuery from "../hooks/query/use-user-query";
 import AccountDropdown from "./AccountDropdown";
 import Button from "./Button";
 
@@ -24,16 +25,12 @@ const Navbar: React.FC<Props> = ({
   const [keyword, setKeyword] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
+  const userQuery = useUserQuery();
 
-  const isLoggedIn = true;
+  const isLoggedIn = !!userQuery.data;
+  // const isLoggedIn = !!token;
 
-  const user = {
-    fullname: "John Doe",
-    email: "JohnDoe@gmail.com",
-    photo: "/images/dummy-avatar.png",
-  };
-
-  const initialFullName = user.fullname
+  const initialFullName = userQuery.data?.name
     .split(" ")
     .map((word) => word[0].toUpperCase())
     .join("");
@@ -80,14 +77,14 @@ const Navbar: React.FC<Props> = ({
         {isLoggedIn && (
           <div className='relative'>
             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-              {!!user.photo && (
+              {!!userQuery.data.picture && (
                 <img
                   className='w-10 h-10 rounded-full object-cover'
-                  src={user.photo}
-                  alt={user.fullname}
+                  src={userQuery.data.picture}
+                  alt={userQuery.data.name}
                 />
               )}
-              {!user.photo && (
+              {!userQuery.data.picture && (
                 <div className='w-10 h-10 rounded-full bg-blue-800 flex justify-center items-center'>
                   <p className='font-bold font-sans text-white'>
                     {initialFullName}

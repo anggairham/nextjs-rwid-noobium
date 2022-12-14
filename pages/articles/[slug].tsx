@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar";
 import axios from "../../helpers/axios";
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
-    const response = await axios.get(`/articles/detail/${query.slug}`);
+    const response = await axios.get(`/articles/detail`);
     return {
       props: {
         article: response.data.data,

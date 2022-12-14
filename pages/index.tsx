@@ -47,7 +47,7 @@ export default function Home() {
               </p>
               <div className='flex flex-wrap gap-3'>
                 {categoriesQuery.data.map((category) => (
-                  <Link href={`/categories/${category.slug}`}>
+                  <Link key={category.id} href={`/categories/${category.slug}`}>
                     <Category key={category.id} label={category.name} />
                   </Link>
                 ))}

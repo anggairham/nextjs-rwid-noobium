@@ -3,14 +3,31 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect } from "react";
 import Loading from "react-spinners/BeatLoader";
+import toast from "react-hot-toast";
 import Article from "../../components/Article";
 import Button from "../../components/Button";
 import Navbar from "../../components/Navbar";
+import useDeleteArticleMutation from "../../hooks/mutations/use-delete-article-mutation";
 import useMyArticlesQuery from "../../hooks/query/use-my-articles-query";
 
 export default function MyArticlePage() {
   const router = useRouter();
   const myArticlesQuery = useMyArticlesQuery();
+  const deleteArticleMutation = useDeleteArticleMutation();
+
+  const deleteArticle = async (articleId: number) => {
+    try {
+      const response = await deleteArticleMutation.mutateAsync({
+        id: articleId,
+      });
+
+      myArticlesQuery.refetch(); //fetching again after article being delete
+      toast.success("delete article success");
+    } catch (error) {
+      toast.error("Failed to delete article");
+    }
+  };
+
   useEffect(() => {
     const handler = () => {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -70,6 +87,14 @@ export default function MyArticlePage() {
                       photo: article.user.picture,
                     }}
                     hasOptions
+                    onClickDelete={() => {
+                      const isConfirmed = confirm(
+                        "Are you sure want to delete?"
+                      );
+                      if (isConfirmed) {
+                        deleteArticle(article.id);
+                      }
+                    }}
                   />
                 ))}
               </Fragment>

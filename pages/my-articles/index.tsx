@@ -59,7 +59,7 @@ export default function MyArticlePage() {
                   <Article
                     key={article.id}
                     url={`/articles/${article.slug}`}
-                    editUrl={`/my-articles/${article.slug}`}
+                    editUrl={`/my-articles/${article.id}`}
                     title={article.title}
                     content={article.content_preview}
                     thumbnail={article.feature_image}

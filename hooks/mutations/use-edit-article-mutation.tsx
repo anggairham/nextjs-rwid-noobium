@@ -2,10 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "../../helpers/axios";
 
 type Payload = {
+  id: number;
   title: string;
   content: string;
-  category_id: string;
-  featured_image: File;
+  category_id: number;
+  featured_image?: File | null;
 };
 
 type Response = any;
@@ -13,11 +14,14 @@ type Response = any;
 const action = async (payload: Payload): Promise<Response> => {
   const token = localStorage.getItem("access_token");
   const form = new FormData();
+  form.append("_method", "PUT");
   form.append("title", payload.title);
   form.append("content", payload.content);
   form.append("category_id", payload.category_id);
-  form.append("featured_image", payload.featured_image);
-  const res = await axios.post("/me/articles", form, {
+  if (payload.featured_image) {
+    form.append("featured_image", payload.featured_image);
+  }
+  const res = await axios.post(`/me/articles/${payload.id}`, form, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "multipart/form-data",
@@ -26,8 +30,8 @@ const action = async (payload: Payload): Promise<Response> => {
   return res.data.data;
 };
 
-const useCreateArticleMutation = () => {
+const useEditArticleMutation = () => {
   return useMutation(action);
 };
 
-export default useCreateArticleMutation;
+export default useEditArticleMutation;

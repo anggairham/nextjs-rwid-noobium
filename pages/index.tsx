@@ -1,10 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
+import Loading from "react-spinners/BeatLoader";
 import Article from "../components/Article";
 import Category from "../components/Category";
 import Navbar from "../components/Navbar";
 import useCategoriesQuery from "../hooks/query/use-categories-query";
-import Loading from "react-spinners/BeatLoader";
 import useArticlesQuery from "../hooks/query/use-article-query";
 import { useEffect, Fragment } from "react";
 

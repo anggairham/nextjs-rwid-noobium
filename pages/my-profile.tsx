@@ -46,9 +46,9 @@ const MyProfilePage: NextPage = () => {
           picture: values.photo,
         });
 
-        toast.success("Edit profile success");
         queryClient.setQueriesData(["user"], response);
         router.push("/");
+        toast.success("Edit profile success");
       } catch (error) {
         toast.error("Failed to edit profile");
       }

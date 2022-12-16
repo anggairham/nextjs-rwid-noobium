@@ -19,6 +19,8 @@ const AccountDropdown: React.FC<Props> = ({}) => {
       queryClient.removeQueries(["user"]);
       toast.success("Sign out Succesfully");
       localStorage.removeItem("access_token");
+      localStorage.removeItem("access_token_generated_at");
+      localStorage.removeItem("access_token_expired_at");
       router.push("/");
     } catch (error) {
       toast.error("Failed to sign out");

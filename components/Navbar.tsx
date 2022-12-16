@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
+import { refreshToken } from "../helpers/axios";
 import useUserQuery from "../hooks/query/use-user-query";
 import AccountDropdown from "./AccountDropdown";
 import Button from "./Button";
@@ -37,6 +38,22 @@ const Navbar: React.FC<Props> = ({
   useEffect(() => {
     setKeyword((router.query.keyword as string) || "");
   }, [router.query.keyword]);
+
+  useEffect(() => {
+    const generatedAt = localStorage.getItem("access_token_generated_at");
+    const expiredAt = localStorage.getItem("access_token_expired_at");
+    if (generatedAt && expiredAt) {
+      const now = Date.now();
+      const afterGenerated15Min = Number(generatedAt) + 900 * 1000;
+      const beforeExpired15Min = Number(generatedAt) - 300 * 1000;
+
+      // dilakukan kondisi ini, agar tidak terlalu sering melakukan refresh token, dan juga semisal token sudah expired maka tidak akan bisa melakukan refresh token
+      if (now > afterGenerated15Min && now < beforeExpired15Min) {
+        refreshToken();
+      }
+    }
+  }, []);
+
   return (
     <header className='h-16 border-b border-slate-200 flex items-center justify-between px-24'>
       <Link href='/'>
